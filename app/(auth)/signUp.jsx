@@ -11,6 +11,12 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { supabase } from "../../lib/supabase";
 import { Dropdown } from "react-native-element-dropdown";
+import {
+    varianten,
+    nebenGroß,
+    nebenKlein,
+    semester,
+} from "../../constants/studyData";
 
 const SignUp = () => {
     const router = useRouter();
@@ -61,117 +67,6 @@ const SignUp = () => {
             Alert.alert("Sign Up", error.message);
         }
     };
-
-    const varianten = [
-        { label: "IIM", value: "IIM" },
-        { label: "IKS", value: "IKS" },
-        { label: "LIN", value: "LIN" },
-        { label: "DISO", value: "DISO" },
-        { label: "GIM", value: "GIM" },
-        { label: "DRIKK", value: "DRIKK" },
-    ];
-
-    const nebenGroß = [
-        {
-            label: "BWL",
-            value: "BWL",
-        },
-        {
-            label: "Geschichte",
-            value: "GES",
-        },
-        {
-            label: "Informationstechnologie",
-            value: "INFO",
-        },
-        {
-            label: "Literatur",
-            value: "LIT",
-        },
-        {
-            label: "Medienwissenschaft",
-            value: "MED",
-        },
-        {
-            label: "Musikwissenschaft",
-            value: "MUS",
-        },
-        {
-            label: "Philosophie",
-            value: "PHIL",
-        },
-        {
-            label: "Physik",
-            value: "PHY",
-        },
-        {
-            label: "Psychologie",
-            value: "PSY",
-        },
-        {
-            label: "Soziologie",
-            value: "SOZ",
-        },
-        {
-            label: "Technik",
-            value: "TEC",
-        },
-        {
-            label: "Übersetzungswissenschaft",
-            value: "UEB",
-        },
-    ];
-
-    const nebenKlein = [
-        {
-            label: "BWL",
-            value: "BWL",
-        },
-        {
-            label: "Geschichte",
-            value: "GES",
-        },
-        {
-            label: "Informationstechnologie",
-            value: "INFO",
-        },
-        {
-            label: "Literatur",
-            value: "LIT",
-        },
-        {
-            label: "Medienwissenschaft",
-            value: "MED",
-        },
-        {
-            label: "Musikwissenschaft",
-            value: "MUS",
-        },
-        {
-            label: "Philosophie",
-            value: "PHIL",
-        },
-        {
-            label: "Physik",
-            value: "PHY",
-        },
-        {
-            label: "Psychologie",
-            value: "PSY",
-        },
-        {
-            label: "Soziologie",
-            value: "SOZ",
-        },
-        {
-            label: "Technik",
-            value: "TEC",
-        },
-        {
-            label: "Übersetzungswissenschaft",
-            value: "UEB",
-        },
-    ];
 
     return (
         <ScreenWrapper bg={"white"}>

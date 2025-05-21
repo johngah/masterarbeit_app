@@ -6,7 +6,13 @@ import { hp, wp } from "../helpers/common";
 import { theme, darkTheme, lightTheme } from "../constants/theme";
 import { ThemeContext } from "../contexts/ThemeContext";
 
-const Header = ({ title, showBackButton = true, mb = 10, ph = 10 }) => {
+const Header = ({
+    title,
+    renderRight,
+    showBackButton = true,
+    mb = 10,
+    ph = 10,
+}) => {
     const router = useRouter();
     const { isDarkMode } = useContext(ThemeContext);
     const currentTheme = isDarkMode ? darkTheme : lightTheme;
@@ -28,6 +34,7 @@ const Header = ({ title, showBackButton = true, mb = 10, ph = 10 }) => {
             >
                 {title || ""}
             </Text>
+            <View style={styles.right}>{renderRight && renderRight()}</View>
         </View>
     );
 };
@@ -50,5 +57,9 @@ const styles = StyleSheet.create({
     backButton: {
         position: "absolute",
         left: 0,
+    },
+    right: {
+        position: "absolute",
+        right: 0,
     },
 });
