@@ -1,67 +1,64 @@
 import { useState, useEffect } from "react";
+import { supabase } from "../lib/supabase";
 
-// Mock-Daten für den Stundenplan
-const MOCK_SCHEDULE = [
-  {
-    id: 1,
-    courseName: "Mathematik I",
-    time: "08:00 - 09:30",
-    location: "Raum A101",
-    date: "2024-12-06", // Datum im ISO-Format
-  },
-  {
-    id: 2,
-    courseName: "Physik Grundlagen",
-    time: "10:00 - 11:30",
-    location: "Raum B202",
-    date: "2024-12-06",
-  },
-  {
-    id: 3,
-    courseName: "Programmierung",
-    time: "13:00 - 14:30",
-    location: "Raum C303",
-    date: "2024-12-07",
-  },
-  {
-    id: 4,
-    courseName: "Design Thinking",
-    time: "15:00 - 16:30",
-    location: "Raum D404",
-    date: "2024-12-07",
-  },
-];
+function getTodayName() {
+    const days = [
+        "Sonntag",
+        "Montag",
+        "Dienstag",
+        "Mittwoch",
+        "Donnerstag",
+        "Freitag",
+        "Samstag",
+    ];
+    const todayIndex = new Date().getDay();
+    return days[todayIndex];
+}
 
-export function useSchedule(date) {
-  const [schedule, setSchedule] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+function sortEventsByStartTime(events) {
+    return [...events].sort((a, b) => a.startzeit.localeCompare(b.startzeit));
+}
 
-  useEffect(() => {
-    // Simulierte Datenabfrage mit Mock-Daten
-    const fetchSchedule = async () => {
-      setLoading(true);
+export function useSchedule(userId) {
+    const [allEvents, setAllEvents] = useState([]);
+    const [todaysEvents, setTodaysEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-      try {
-        // Simuliere eine kurze Ladezeit
-        await new Promise((resolve) => setTimeout(resolve, 500));
+    useEffect(() => {
+        async function fetchSchedule() {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from("profile")
+                .select("schedule")
+                .eq("id", userId)
+                .single();
 
-        // Filtere die Mock-Daten nach dem ausgewählten Datum
-        const formattedDate = date.toISOString().split("T")[0];
-        const filteredSchedule = MOCK_SCHEDULE.filter(
-          (item) => item.date === formattedDate
-        );
+            if (error) {
+                console.error(error);
+                setError("Fehler beim Laden des Stundenplans");
+                setLoading(false);
+                return;
+            }
 
-        setSchedule(filteredSchedule);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
+            const schedule = data?.schedule?.stundenplan || [];
+            const todayName = getTodayName();
+            const today = schedule.filter(
+                (item) => item.wochentag === todayName
+            );
+
+            setAllEvents(sortEventsByStartTime(schedule));
+            setTodaysEvents(sortEventsByStartTime(today));
+            setLoading(false);
+        }
+
+        fetchSchedule();
+    }, [userId]);
+
+    return {
+        allEvents,
+        todaysEvents,
+        loading,
+        error,
     };
-
-    fetchSchedule();
-  }, [date]);
-
-  return { schedule, loading, error };
 }

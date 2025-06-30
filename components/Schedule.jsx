@@ -13,8 +13,9 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 const { width } = Dimensions.get("window");
 
-export default function Schedule() {
-    const days = ["Mo", "Di", "Mi", "Do", "Fr"];
+export default function Schedule({ schedule }) {
+    const days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"];
+    const shortDays = ["Mo", "Di", "Mi", "Do", "Fr"];
     const [selectedDay, setSelectedDay] = useState(0);
 
     // Provisorische Veranstaltungen
@@ -45,10 +46,22 @@ export default function Schedule() {
         },
     ];
 
-    // Filtern der Events anhand des aktuell ausgewählten Tages
-    const filteredEvents = events.filter(
-        (event) => event.day === days[selectedDay]
+    const longDays = {
+        Mo: "Montag",
+        Di: "Dienstag",
+        Mi: "Mittwoch",
+        Do: "Donnerstag",
+        Fr: "Freitag",
+    };
+
+    const filteredEvents = schedule.filter(
+        (event) => event.wochentag === longDays[shortDays[selectedDay]]
     );
+
+    // Filtern der Events anhand des aktuell ausgewählten Tages
+    // const filteredEvents = schedule.filter(
+    //     (event) => event.wochentag === days[selectedDay]
+    // );
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -56,7 +69,7 @@ export default function Schedule() {
                 {/* Wochentags-Picker */}
                 <View style={styles.picker}>
                     <View style={styles.itemRow}>
-                        {days.map((day, index) => (
+                        {shortDays.map((shortDay, index) => (
                             <TouchableWithoutFeedback
                                 key={index}
                                 onPress={() => setSelectedDay(index)}
@@ -75,7 +88,7 @@ export default function Schedule() {
                                                 styles.selectedItemDate,
                                         ]}
                                     >
-                                        {day}
+                                        {shortDay}
                                     </Text>
                                 </View>
                             </TouchableWithoutFeedback>
@@ -93,10 +106,10 @@ export default function Schedule() {
                             filteredEvents.map((event, index) => (
                                 <View key={index} style={styles.eventCard}>
                                     <Text style={styles.eventTime}>
-                                        {event.start} - {event.end}
+                                        {event.startzeit} - {event.endzeit}
                                     </Text>
                                     <Text style={styles.eventTitle}>
-                                        {event.title}
+                                        {event.name}
                                     </Text>
                                     <Text style={styles.eventDozent}>
                                         {event.dozent}

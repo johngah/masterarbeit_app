@@ -45,13 +45,22 @@ const Mensa = () => {
         const isSelected = selectedDate.toDateString() === date.toDateString();
         return (
             <TouchableOpacity
-                style={[styles.dateItem, isSelected && styles.selectedDateItem]}
+                style={[
+                    styles.dateItem,
+                    isSelected
+                        ? styles.selectedDateItem
+                        : {
+                              backgroundColor: currentTheme.colors.mealSelect,
+                          },
+                ]}
                 onPress={() => setSelectedDate(date)}
             >
                 <Text
                     style={[
                         styles.dateText,
-                        isSelected && styles.selectedDateText,
+                        isSelected
+                            ? styles.selectedDateText
+                            : { color: currentTheme.colors.textDark },
                     ]}
                 >
                     {date.toLocaleDateString("de-DE", {
@@ -66,18 +75,49 @@ const Mensa = () => {
 
     // Render-Funktion: Gericht
     const renderMealItem = ({ item }) => (
-        <View style={styles.mealItem}>
-            <Text style={styles.mealName}>{item.name}</Text>
-            <Text style={styles.mealCategory}>
+        <View
+            style={[
+                styles.mealItem,
+                { backgroundColor: currentTheme.colors.mealSelect },
+            ]}
+        >
+            <Text
+                style={[styles.mealName, { color: currentTheme.colors.text }]}
+            >
+                {item.name}
+            </Text>
+            <Text
+                style={[
+                    styles.mealCategory,
+                    { color: currentTheme.colors.text },
+                ]}
+            >
                 {item.tags.categories.map((cat) => cat.name).join(", ")}
             </Text>
-            <Text style={styles.mealPrice}>
+            <Text
+                style={[
+                    styles.mealPrice,
+                    { color: currentTheme.colors.textLight },
+                ]}
+            >
                 Studierende: {item.price.student} €
             </Text>
-            <Text style={styles.mealPrice}>
+            <Text
+                style={[
+                    styles.mealPrice,
+                    { color: currentTheme.colors.textLight },
+                ]}
+            >
                 Mitarbeiter: {item.price.employee} €
             </Text>
-            <Text style={styles.mealPrice}>Gäste: {item.price.guest} €</Text>
+            <Text
+                style={[
+                    styles.mealPrice,
+                    { color: currentTheme.colors.textLight },
+                ]}
+            >
+                Gäste: {item.price.guest} €
+            </Text>
         </View>
     );
 

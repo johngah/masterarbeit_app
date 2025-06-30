@@ -25,7 +25,7 @@ const Header = ({
             ]}
         >
             {showBackButton && (
-                <View style={styles.backButton}>
+                <View style={[styles.backButton]}>
                     <BackButton router={router} />
                 </View>
             )}

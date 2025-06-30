@@ -8,6 +8,8 @@ export const lightTheme = {
         background: "smokewhite",
         tabBG: "white",
         sectionBackground: "white",
+        input: "white",
+        mealSelect: "lightgray",
 
         text: "#494949",
         textLight: "black",
@@ -42,6 +44,8 @@ export const darkTheme = {
         background: "#121212",
         tabBG: "#121212",
         sectionBackground: "black",
+        input: "#2e2e2e",
+        mealSelect: "#2e2e2e",
 
         text: "white",
         textLight: "white",

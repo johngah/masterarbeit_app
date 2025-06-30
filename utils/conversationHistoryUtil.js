@@ -2,6 +2,11 @@ let conversation = [];
 
 export const getConversation = () => conversation;
 
+export const getLastSystemMessage = () => {
+    const lastMessage = conversation[conversation.length - 1];
+    return lastMessage;
+};
+
 export const addUserMessage = (messageText) => {
     conversation.push({
         role: "user",

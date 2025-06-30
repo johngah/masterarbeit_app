@@ -30,8 +30,7 @@ const Home = () => {
     const { isDarkMode, toggleTheme } = useContext(ThemeContext);
     const currentTheme = isDarkMode ? darkTheme : lightTheme;
     const statusBarColor = isDarkMode ? "dark" : "light";
-
-    console.log("user: ", user);
+    const { todaysEvents, loading } = useSchedule(user.id);
 
     return (
         <ScreenWrapper bg={currentTheme.colors.background}>
@@ -108,15 +107,13 @@ const Home = () => {
                             },
                         ]}
                     >
-                        {veranstaltungen.length > 0 ? (
-                            veranstaltungen.map((item) => {
+                        {todaysEvents.length > 0 ? (
+                            todaysEvents.map((item) => {
                                 return (
                                     <TerminListItem
                                         key={item.name}
                                         name={item.name}
-                                        dozent={item.dozent}
-                                        zeit={item.zeit}
-                                        raum={item.raum}
+                                        zeit={item.startzeit}
                                     />
                                 );
                             })
@@ -184,7 +181,7 @@ const Home = () => {
                         ]}
                     >
                         {loadingMeals ? (
-                            <ActivityIndicator size="small" color="#0000ff" />
+                            <ActivityIndicator size="small" color="black" />
                         ) : errorMeals ? (
                             <Text
                                 style={{ color: currentTheme.colors.textDark }}
@@ -193,8 +190,25 @@ const Home = () => {
                             </Text>
                         ) : meals.length > 0 ? (
                             meals.map((meal) => (
-                                <View key={meal.id} style={styles.mealItem}>
-                                    <Text style={styles.mealTitle}>
+                                <View
+                                    key={meal.id}
+                                    style={[
+                                        styles.mealItem,
+                                        {
+                                            backgroundColor:
+                                                currentTheme.colors.background,
+                                        },
+                                    ]}
+                                >
+                                    <Text
+                                        style={[
+                                            styles.mealTitle,
+                                            {
+                                                color: currentTheme.colors
+                                                    .textDark,
+                                            },
+                                        ]}
+                                    >
                                         {meal.name}
                                     </Text>
                                 </View>
@@ -278,7 +292,7 @@ const styles = StyleSheet.create({
     scheduleItem: {
         marginBottom: 15,
         padding: 10,
-        backgroundColor: "#fff",
+        backgroundColor: "whitesmoke",
         borderRadius: 8,
         shadowColor: "#000",
         shadowOpacity: 0.07,

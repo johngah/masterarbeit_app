@@ -24,14 +24,14 @@ const TerminListItem = ({ name, dozent, zeit, raum }) => {
                 >
                     {name}
                 </Text>
-                <Text
+                {/* <Text
                     style={[
                         styles.terminDozent,
                         { color: currentTheme.colors.textDark },
                     ]}
                 >
                     {dozent}
-                </Text>
+                </Text> */}
             </View>
             <View>
                 <Text
@@ -40,16 +40,16 @@ const TerminListItem = ({ name, dozent, zeit, raum }) => {
                         { color: currentTheme.colors.textDark },
                     ]}
                 >
-                    {zeit}
+                    {zeit} Uhr
                 </Text>
-                <Text
+                {/* <Text
                     style={[
                         styles.terminRaum,
                         { color: currentTheme.colors.textDark },
                     ]}
                 >
                     {raum}
-                </Text>
+                </Text> */}
             </View>
         </View>
     );
@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        backgroundColor: "whitesmoke",
         borderRadius: 4,
         padding: 10,
     },

@@ -1,5 +1,13 @@
-import { StyleSheet, Text, View, Pressable, Image } from "react-native";
-import React, { useState, useContext } from "react";
+import {
+    StyleSheet,
+    Text,
+    View,
+    Pressable,
+    Image,
+    TouchableOpacity,
+    Modal,
+} from "react-native";
+import React, { useState, useContext, useEffect } from "react";
 import ScreenWrapper from "../../../components/ScreenWrapper";
 import { supabase } from "../../../lib/supabase";
 import { useAuth } from "../../../contexts/AuthContext";
@@ -12,14 +20,49 @@ import Avatar from "../../../components/Avatar";
 import Button from "../../../components/Button";
 import { ThemeContext } from "../../../contexts/ThemeContext";
 import Schedule from "../../../components/Schedule";
+import { getSchedule } from "../../../utils/scheduleUtils";
+import { Ionicons } from "@expo/vector-icons";
 
 const Planner = () => {
     const { user, setAuth } = useAuth();
     const router = useRouter();
+    const [schedule, setSchedule] = useState([]);
     const [hasData, setData] = useState(false);
     const { isDarkMode, toggleTheme } = useContext(ThemeContext);
     const currentTheme = isDarkMode ? darkTheme : lightTheme;
     const statusBarColor = isDarkMode ? "dark" : "light";
+    const [menuVisible, setMenuVisible] = useState(false);
+
+    useEffect(() => {
+        const fetchSchedule = async () => {
+            if (user) {
+                const scheduleData = await getSchedule(user.id);
+                if (scheduleData) {
+                    setSchedule(scheduleData.stundenplan);
+                    setData(true);
+                } else {
+                    setData(false);
+                }
+            } else {
+                setData(false);
+            }
+        };
+
+        fetchSchedule();
+    }, [user]);
+
+    const renderHeaderRight = () => (
+        <TouchableOpacity
+            onPress={() => setMenuVisible(true)}
+            style={styles.headerButton}
+        >
+            <Ionicons
+                name="ellipsis-horizontal-circle"
+                size={28}
+                color={isDarkMode ? "white" : "black"}
+            />
+        </TouchableOpacity>
+    );
 
     return (
         <ScreenWrapper bg={currentTheme.colors.background}>
@@ -35,6 +78,7 @@ const Planner = () => {
                     >
                         Studienplan
                     </Text>
+                    {renderHeaderRight()}
                 </View>
                 <View style={styles.container3}>
                     {!hasData ? (
@@ -73,9 +117,45 @@ const Planner = () => {
                             </View>
                         </View>
                     ) : (
-                        <Schedule />
+                        <Schedule schedule={schedule} />
                     )}
                 </View>
+                {/* Modal für das Menü */}
+                <Modal
+                    presentationStyle="overFullScreen"
+                    visible={menuVisible}
+                    transparent
+                    animationType="fade"
+                    onRequestClose={() => setMenuVisible(false)}
+                >
+                    <TouchableOpacity
+                        style={styles.modalOverlay}
+                        onPress={() => setMenuVisible(false)}
+                        activeOpacity={1}
+                    >
+                        <View style={styles.menuContainer}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setMenuVisible(false);
+                                }}
+                            >
+                                <Text style={styles.menuItem}>
+                                    Stundenplan löschen
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    setMenuVisible(false);
+                                    router.navigate("chat");
+                                }}
+                            >
+                                <Text style={styles.menuItem}>
+                                    Zum KI-Assistenten
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </TouchableOpacity>
+                </Modal>
                 <View></View>
             </View>
         </ScreenWrapper>
@@ -177,5 +257,22 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: "600",
         color: "#111",
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.4)",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    menuContainer: {
+        backgroundColor: "#fff",
+        borderRadius: 8,
+        padding: 16,
+        width: "80%",
+        alignItems: "center",
+    },
+    menuItem: {
+        fontSize: 18,
+        paddingVertical: 12,
     },
 });

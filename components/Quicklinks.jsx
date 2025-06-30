@@ -2,12 +2,18 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { theme } from "../constants/theme";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter, Link } from "expo-router";
 
 const Quicklinks = () => {
+    const router = useRouter();
+
     return (
         <View>
             <View style={styles.quickLinksContainer}>
-                <TouchableOpacity style={styles.quickLinkButton}>
+                <TouchableOpacity
+                    style={styles.quickLinkButton}
+                    onPress={() => router.navigate("/planner")}
+                >
                     <Ionicons name="calendar-outline" size="36" color="white" />
                     <Text style={styles.quickLinkText}>Stundenplan</Text>
                 </TouchableOpacity>
@@ -25,7 +31,10 @@ const Quicklinks = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.quickLinksContainer}>
-                <TouchableOpacity style={styles.quickLinkButton}>
+                <TouchableOpacity
+                    style={styles.quickLinkButton}
+                    onPress={() => router.navigate("/mensa")}
+                >
                     <Ionicons
                         name="fast-food-outline"
                         size="36"
