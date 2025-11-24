@@ -10,7 +10,7 @@ import { supabase } from "../lib/supabase";
 import { router } from "expo-router";
 
 const openai = new OpenAI({
-    apiKey: "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",
+    apiKey: "****",
 });
 
 const systemPrompt = `DU BIST EIN AKADEMISCHER STUDIENPLAN-EXPERTE SPEZIALISIERT AUF DEN STUDIENGANG **INTERNATIONALES INFORMATIONSMANAGEMENT** (IIM). DEINE AUFGABE IST ES, FÜR STUDIERENDE EINEN OPTIMALEN STUNDENPLAN ZU GENERIEREN. Die Antwort soll strukturiert und übersichtlich im Markdown-Format erfolgen.
